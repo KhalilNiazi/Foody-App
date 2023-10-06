@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "245460506643",
+    "project_id": "food-app-6f2a6",
+    "storage_bucket": "food-app-6f2a6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:245460506643:android:d5706540478bed268047e6",
+        "android_client_info": {
+          "package_name": "com.niazi.teastyapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyClrmfXnl2_MO9EApb9wNr2qk3HjqaqCTo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

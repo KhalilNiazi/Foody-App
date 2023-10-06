@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <color name="appColor">#B2FF59</color>
+    <color name="appColorbackground">#70C50F</color>
+    <color name="appColorbackgrounddark">@color/appColor</color>
+    <color name="shapeColor">#3E2F34</color>
+    <color name="shapeColorbackground">#30141D</color>
+    <color name="shapeColorbackgrounddark">@color/shapeColor</color>
+</resources>
