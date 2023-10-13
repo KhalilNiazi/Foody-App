@@ -13,13 +13,34 @@
         android:theme="@style/Theme.TeastyApp"
         tools:targetApi="31">
         <activity
-            android:name=".Activities.MainActivity"
+            android:name=".Activities.ShowActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activities.UpdateActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activities.ProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activities.Upload_Food"
+            android:exported="false" />
+        <activity
+            android:name=".Activities.Sign_Up_Activity"
+            android:exported="false" />
+        <activity
+            android:name=".Activities.Splash_Screen"
+            android:exported="false" />
+        <activity
+            android:name=".Activities.HomeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activities.Seller_Data_Activity"
             android:exported="false" />
         <activity
             android:name=".Activities.Sign_In_Activity"
             android:exported="false" />
         <activity
-            android:name=".Activities.Sign_Up_Activity"
+            android:name=".Activities.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

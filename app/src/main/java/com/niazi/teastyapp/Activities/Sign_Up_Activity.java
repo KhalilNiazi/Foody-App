@@ -3,12 +3,16 @@ package com.niazi.teastyapp.Activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -21,6 +25,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
+import com.niazi.teastyapp.Dialog.Progress_Dialog;
 import com.niazi.teastyapp.Model.User;
 import com.niazi.teastyapp.R;
 import com.niazi.teastyapp.databinding.ActivitySignUpBinding;
@@ -29,9 +34,8 @@ public class Sign_Up_Activity extends AppCompatActivity {
 
     ActivitySignUpBinding binding;
 
-    FirebaseAuth auth;
-    ProgressDialog progressDialog;
 
+    FirebaseAuth auth;
     FirebaseDatabase database;
 
     @Override
@@ -40,7 +44,7 @@ public class Sign_Up_Activity extends AppCompatActivity {
         binding = ActivitySignUpBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        progressDialog = new ProgressDialog(Sign_Up_Activity.this);
+        final Progress_Dialog progressDialog = new Progress_Dialog(this);
 
 
         database = FirebaseDatabase.getInstance();
@@ -52,8 +56,9 @@ public class Sign_Up_Activity extends AppCompatActivity {
 
             String ed_Stname = binding.edname.getText().toString();
             String ed_Stphone = binding.edmobileno.getText().toString();
-            String ed_Stemail = binding.edemail.getText().toString();
-            String ed_Stpassw = binding.edpassword.getText().toString();
+            String ed_Stresturent = binding.edrestaurants.getText().toString();
+            String ed_address = binding.address.getText().toString();
+            String ed_email = binding.edemail.getText().toString();
             String ed_Stconfpass = binding.edconfirmpass.getText().toString();
 
 
@@ -64,36 +69,50 @@ public class Sign_Up_Activity extends AppCompatActivity {
             } else if (ed_Stphone.isEmpty() || ed_Stphone.length() < 11) {
                 showError(binding.edmobileno, "Mobile Number must contain 11 character");
 
-            } else if (ed_Stemail.isEmpty()) {
+            } else if (ed_email.isEmpty()) {
 
 
-                binding.edname.setError("Please type Email");
-            }  else if (ed_Stpassw.isEmpty() || ed_Stphone.length() < 7) {
-                showError(binding.edpassword, "Password must contain 7 character");
+                binding.edemail.setError("Please type Email");
+            }
+            else if (!ed_email.contains("@")) {
+                showError(binding.edemail, "Use @ in Your Email");
+            }   else if (ed_Stresturent.isEmpty()) {
+                showError(binding.edrestaurants, "Please type Restaurant name");
 
             } else if (ed_Stconfpass.isEmpty() || ed_Stconfpass.length() < 7) {
                 showError(binding.edconfirmpass, "Password must contain 7 character");
 
-            } else if (!ed_Stemail.contains("@")) {
-                showError(binding.edemail, "Use @ in Your Email");
-            } else if(binding.edpassword == binding.edconfirmpass)  {
+            } else if (ed_address.isEmpty() ) {
+                showError(binding.address, "Please type Your Address");
 
-                Dialog dialog = new Dialog( Sign_Up_Activity.this);
+            } else  {
+                AlertDialog.Builder dialog = new AlertDialog.Builder( Sign_Up_Activity.this);
 
-                dialog.setContentView(R.layout.dialog_box);
-                TextView warningtext = dialog.findViewById(R.id.Textmessage);
-                TextView yes = dialog.findViewById(R.id.yes);
-                TextView no = dialog.findViewById(R.id.no);
+                View view2 = LayoutInflater.from(Sign_Up_Activity.this).
+                        inflate(R.layout.dialog_box,
+                                (ConstraintLayout)findViewById(R.id.conback));
 
-                dialog.setCancelable(false);
-                warningtext.setText("Are You Sure To Create Your Account");
-                yes.setOnClickListener(view1 -> {
-                    progressDialog.setMessage("Create Your Profile...");
-                    progressDialog.setCancelable(false);
+                dialog.setView(view2);
+
+                ((TextView) view2.findViewById(R.id.Textmessage)).setText("Are You Sure To Create Your Account ");
+                ((TextView) view2.findViewById(R.id.yes)).setText("Yes");
+                ((TextView) view2.findViewById(R.id.no)).setText("No");
+                final AlertDialog alertDialog = dialog.create();
+                alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+
+                view2.findViewById(R.id.no).setOnClickListener(view1 -> {
+
+                    Toast.makeText(Sign_Up_Activity.this, "Cancel", Toast.LENGTH_SHORT).show();
+
+                    alertDialog.dismiss();
+                });
+                view2.findViewById(R.id.yes).setOnClickListener(view1 -> {
+
                     progressDialog.show();
 
 
-                    auth.createUserWithEmailAndPassword(ed_Stemail,ed_Stconfpass)
+
+                    auth.createUserWithEmailAndPassword(ed_email,ed_Stconfpass)
                             .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
@@ -101,24 +120,25 @@ public class Sign_Up_Activity extends AppCompatActivity {
                                     String uid = auth.getUid();
 
 
-                                    User user = new User(uid,ed_Stname,ed_Stphone, ed_Stemail, ed_Stconfpass);
+                                    User user = new User(uid,ed_Stname,ed_Stphone, ed_email, ed_Stresturent,ed_address, ed_Stconfpass);
 
 
                                     database.getReference()
+                                            .child("Seller Data")
                                             .child(uid)
-                                            .child("record")
                                             .setValue(user)
                                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                 @Override
                                                 public void onSuccess(Void aVoid) {
-                                                    Toast.makeText(Sign_Up_Activity.this, "SignUp Successfully", Toast.LENGTH_SHORT).show();
+                                                    Toast.makeText(Sign_Up_Activity.this, "Account Created Successfully", Toast.LENGTH_SHORT).show();
 
-                                                    Intent intent = new Intent(Sign_Up_Activity.this, Sign_In_Activity.class);
+                                                    Intent intent = new Intent(Sign_Up_Activity.this, Seller_Data_Activity.class);
                                                     startActivity(intent);
                                                     finish();
 
 
                                                     progressDialog.dismiss();
+
 
 
                                                 }
@@ -127,59 +147,55 @@ public class Sign_Up_Activity extends AppCompatActivity {
                                                 @Override
                                                 public void onFailure(@NonNull Exception e) {
 
-                                                    Dialog dialog = new Dialog( Sign_Up_Activity.this);
-
-                                                    dialog.setContentView(R.layout.warn_dialog_box);
-                                                    TextView warningtext = dialog.findViewById(R.id.Textmessage);
-                                                    TextView yes = dialog.findViewById(R.id.yes);
-
-                                                    dialog.setCancelable(false);
-                                                    warningtext.setText(e.getLocalizedMessage().toString());
-
-                                                    yes.setOnClickListener(view2 -> {
-                                                        dialog.dismiss();
-                                                    });
                                                     progressDialog.dismiss();
+                                                    AlertDialog.Builder dialog = new AlertDialog.Builder( Sign_Up_Activity.this);
 
-                                                    dialog.show();
+                                                    View view2 = LayoutInflater.from(Sign_Up_Activity.this).
+                                                            inflate(R.layout.warn_dialog_box,(ConstraintLayout)findViewById(R.id.warnbac));
+
+                                                    dialog.setView(view2);
+
+                                                    ((TextView) view2.findViewById(R.id.Textmessag)).setText(e.getLocalizedMessage().toString());
+                                                    ((TextView) view2.findViewById(R.id.okay)).setText("Okay");
+                                                    ((TextView) view2.findViewById(R.id.error)).setText("Error");
+                                                    final AlertDialog alertDialog = dialog.create();
+                                                    alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+                                                    view2.findViewById(R.id.okay).setOnClickListener(view3 -> {
+
+                                                        alertDialog.dismiss();
+                                                    });
+
+                                                    alertDialog.setCancelable(false);
+
+                                                    alertDialog.setContentView(view2);
+
+
+                                                    alertDialog.show();
+
+
                                                 }
                                             });
                                 }
-                            }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
 
-
-                                    Dialog dialog = new Dialog( Sign_Up_Activity.this);
-
-                                    dialog.setContentView(R.layout.warn_dialog_box);
-                                    TextView warningtext = dialog.findViewById(R.id.Textmessage);
-                                    TextView yes = dialog.findViewById(R.id.yes);
-
-                                    dialog.setCancelable(false);
-                                    warningtext.setText(e.getLocalizedMessage().toString());
-
-                                    yes.setOnClickListener(view2 -> {
-                                        dialog.dismiss();
-                                    });
-                                    progressDialog.dismiss();
-
-                                    dialog.show();
-                                }
                             });
                 });
-                no.setOnClickListener(view1 -> {
 
-                    Toast.makeText(Sign_Up_Activity.this, "Cancel", Toast.LENGTH_SHORT).show();
 
-                });
-
-                  dialog.show();
+                  alertDialog.show();
             }
 
 
                 });
+
+
+        binding.signinbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Sign_Up_Activity.this,Sign_In_Activity.class);
+                startActivity(intent);
             }
+        });
+    }
 
 
 

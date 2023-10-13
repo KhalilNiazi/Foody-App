@@ -3,11 +3,14 @@ package com.niazi.teastyapp.Activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -18,6 +21,8 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.niazi.teastyapp.Dialog.Progress_Dialog;
 import com.niazi.teastyapp.R;
 import com.niazi.teastyapp.databinding.SignInActivityBinding;
 
@@ -28,7 +33,7 @@ public class Sign_In_Activity extends AppCompatActivity {
 
     FirebaseAuth firebaseAuth;
 
-    ProgressDialog progressDialog;
+    Progress_Dialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,18 +45,40 @@ public class Sign_In_Activity extends AppCompatActivity {
         firebaseAuth= FirebaseAuth.getInstance();
 
 
-        progressDialog = new ProgressDialog(Sign_In_Activity.this);
+        progressDialog = new Progress_Dialog(Sign_In_Activity.this);
 
         binding.signInBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
 
+                AlertDialog.Builder dialog = new AlertDialog.Builder( Sign_In_Activity.this);
 
-                progressDialog.setTitle("Login Please Wait...");
+                View view2 = LayoutInflater.from(Sign_In_Activity.this).
+                        inflate(R.layout.dialog_box,(ConstraintLayout)findViewById(R.id.conback));
+
+                dialog.setView(view2);
+
+                ((TextView) view2.findViewById(R.id.Textmessage)).setText("Are You To Login In Your Account ");
+                ((TextView) view2.findViewById(R.id.yes)).setText("Yes");
+                ((TextView) view2.findViewById(R.id.no)).setText("No");
+                final AlertDialog alertDialog = dialog.create();
+                alertDialog.setCancelable(false);
+                alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+
+
+                view2.findViewById(R.id.no).setOnClickListener(view1 -> {
+
+                    Toast.makeText(Sign_In_Activity.this, "Cancel", Toast.LENGTH_SHORT).show();
+
+                                    });
+                view2.findViewById(R.id.yes).setOnClickListener(view1 -> {
+
+
+                    progressDialog.setTitle("Login Please Wait...");
                 progressDialog.show();
                 String ed_StEmal = binding.edemail.getText().toString();
-                String ed_Stpass = binding.edpasswor.getText().toString();
+                String ed_Stpass = binding.edpassword.getText().toString();
 
                 firebaseAuth.signInWithEmailAndPassword(ed_StEmal, ed_Stpass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
@@ -65,7 +92,7 @@ public class Sign_In_Activity extends AppCompatActivity {
 
                         }
                         else if (ed_Stpass.isEmpty() || ed_Stpass.length() < 7) {
-                            showError(binding.edpasswor, "Password must contain 7 character");
+                            showError(binding.edpassword, "Password must contain 7 character");
 
                         }
                          else if (task.isSuccessful()) {
@@ -73,15 +100,34 @@ public class Sign_In_Activity extends AppCompatActivity {
 
                             Toast.makeText(Sign_In_Activity.this, "Login Successfully", Toast.LENGTH_SHORT).show();
 
-                            Intent intent = new Intent(Sign_In_Activity.this, MainActivity.class);
+                            Intent intent = new Intent(Sign_In_Activity.this, Seller_Data_Activity.class);
                             startActivity(intent);
                             finish();
                             progressDialog.dismiss();
 
                         } else {
+                               AlertDialog.Builder dialog = new AlertDialog.Builder( Sign_In_Activity.this);
 
-                            Toast.makeText(Sign_In_Activity.this, "Wrong Email Or Password", Toast.LENGTH_SHORT).show();
-                            progressDialog.dismiss();
+                                View view2 = LayoutInflater.from(Sign_In_Activity.this).
+                                        inflate(R.layout.warn_dialog_box,(ConstraintLayout)findViewById(R.id.warnbac));
+
+                                dialog.setView(view2);
+
+                                ((TextView) view2.findViewById(R.id.Textmessag)).setText("Some Thing went wrong");
+                                ((TextView) view2.findViewById(R.id.okay)).setText("Okay");
+                                final AlertDialog alertDialog = dialog.create();
+                                alertDialog.setCancelable(false);
+
+                                alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+
+                                view2.findViewById(R.id.okay).setOnClickListener(view1 -> {
+
+
+
+                                    alertDialog.dismiss();
+
+                                    progressDialog.dismiss();
+                                });;
 
                         }
                     }
@@ -89,27 +135,36 @@ public class Sign_In_Activity extends AppCompatActivity {
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
+                        AlertDialog.Builder dialog = new AlertDialog.Builder( Sign_In_Activity.this);
 
-                        Dialog dialog = new Dialog( Sign_In_Activity.this);
+                        View view2 = LayoutInflater.from(Sign_In_Activity.this).
+                                inflate(R.layout.warn_dialog_box,(ConstraintLayout)findViewById(R.id.warnbac));
 
-                        dialog.setContentView(R.layout.warn_dialog_box);
-                        TextView warningtext = dialog.findViewById(R.id.Textmessage);
-                        TextView yes = dialog.findViewById(R.id.yes);
+                        dialog.setView(view2);
 
-                        dialog.setCancelable(false);
-                        warningtext.setText(e.getLocalizedMessage().toString());
+                        ((TextView) view2.findViewById(R.id.Textmessag)).setText(e.getLocalizedMessage().toString());
+                        ((TextView) view2.findViewById(R.id.okay)).setText("Okay");
+                        final AlertDialog alertDialog = dialog.create();
+                        alertDialog.setCancelable(false);
 
-                        yes.setOnClickListener(view2 -> {
-                            dialog.dismiss();
+                        alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+
+                        view2.findViewById(R.id.okay).setOnClickListener(view1 -> {
+
+
+
+                                alertDialog.dismiss();
+
                         });
-                        progressDialog.dismiss();
-
-                        dialog.show();
                     }
                 });
 
+            });
+            alertDialog.show();
             }
+
         });
+
 
         binding.signupbtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,4 +183,5 @@ public class Sign_In_Activity extends AppCompatActivity {
 
 
     }
+
 }

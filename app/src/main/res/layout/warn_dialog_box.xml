@@ -2,21 +2,21 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_width="wrap_content"
+    android:id="@+id/warnbac"
+    android:layout_height="match_parent"
     android:background="@android:color/transparent">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
-        android:layout_width="350dp"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
 
         android:layout_margin="10dp"
-        android:layout_marginStart="32dp"
 
         app:cardCornerRadius="20dp"
         app:cardElevation="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -51,13 +51,14 @@
 
 
                         <TextView
+                            android:id="@+id/error"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical|end"
                             android:gravity="right"
                             android:text="Error"
-                            android:textStyle="bold"
                             android:textColor="@color/white"
+                            android:textStyle="bold"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -68,15 +69,15 @@
 
 
                 <TextView
-                    android:id="@+id/Textmessage"
+                    android:id="@+id/Textmessag"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginStart="16dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="16dp"
                     android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="24dp"
+                    android:layout_marginBottom="32dp"
                     android:gravity="center"
-                    android:text="Are You Sure To Create Your Accountdfmva;kmvm'dlfmv'alvm'advma'klfvm'afmvalmvaklmv'addfvasd;dsasldc;asldvva;sldkdva'sldkva'slZKC :sdnc;sdc;KJJNcn?Zdkvka'sldkva'skvn"
+                    android:text="Some thing went wrong"
                     android:textColor="#880000"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -84,7 +85,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/constraintLayout2"
                     app:layout_constraintVertical_bias="0.352" />
 
-              </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -92,11 +93,13 @@
 
     <TextView
         android:id="@+id/okay"
-        android:layout_width="300dp"
+        android:layout_width="100dp"
         android:layout_height="40dp"
+        android:layout_marginBottom="100dp"
         android:background="@drawable/dialogback"
         android:backgroundTint="#880000"
         android:elevation="11dp"
+
         android:gravity="center"
         android:text="Okay"
         android:textColor="@color/white"

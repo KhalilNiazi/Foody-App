@@ -3,11 +3,35 @@
     <style name="Base.Theme.TeastyApp" parent="Theme.Material3.Light.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">@color/reddark</item>
+        <item name="colorPrimaryVariant">@color/reddark</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/reddark</item>
+        <item name="colorSecondaryVariant">@color/reddark</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+
     </style>
-    <style name="NeumorphicButton">
-        <item name="android:background">@drawable/neumorphic_button_bg</item>
-        <item name="android:textColor">@android:color/black</item>
-        <item name="android:textSize">16sp</item>
+
+    <style name="Theme.TeastyApp.NoActionBar">
+        <item name="windowActionBar">true</item>
+        <item name="windowNoTitle">false</item>
     </style>
+
+    <style name="Theme.TeastyApp.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.TeastyApp.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
     <style name="Theme.TeastyApp" parent="Base.Theme.TeastyApp" />
+
+    <style name="BottomSheetDialogTheme" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/BottomSheetDialogTheme</item>
+    </style>
+    <style name="BottomSheetStyle" parent="Widget.Design.BottomSheet.Modal"
+        >
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
 </resources>

@@ -3,9 +3,22 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <color name="appColor">#B2FF59</color>
-    <color name="appColorbackground">#70C50F</color>
-    <color name="appColorbackgrounddark">@color/appColor</color>
+    <color name="reddark">#FF6E40</color>
+    <color name="Color1">#EAEFA0</color>
+    <color name="Color2">#A3CEF3</color>
+    <color name="Color3">#A1F4A5</color>
+    <color name="Color4">#FFE881</color>
+    <color name="Color5">#F781AC</color>
+    <color name="Color6">#00D9FF</color>
+    <color name="redl">#EA615E</color>
+    <color name="red">#F88885</color>
+    <color name="primery">@color/reddark</color>
+    <color name="colorPrimary">@color/reddark</color>
+    <color name="colorPrimaryVariant">@color/reddark</color>
+
+    <color name="appColor">@color/redl</color>
+    <color name="appColorbackground">@color/reddark</color>
+    <color name="appColorbackgrounddark">@color/redl</color>
     <color name="shapeColor">#3E2F34</color>
     <color name="shapeColorbackground">#30141D</color>
     <color name="shapeColorbackgrounddark">@color/shapeColor</color>
